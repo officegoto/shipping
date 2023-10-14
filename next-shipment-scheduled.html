@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+center {
+    color: #c00000;
+    font-size: 24px;
+    font-weight: bold;
+}
+</style>
+<script type="text/javascript">
+    var dt = new Date();
+    const wd = ['日', '月', '火', '水', '木', '金', '土'];
+    const year = 2023;
+    const holiday_dates = [new Date(`${year}/08/11`), new Date(`${year}/08/14`), new Date(`${year}/08/15`),
+        new Date(`${year}/08/16`), new Date(`${year}/09/18`), new Date(`${year}/10/09`),
+        new Date(`${year}/11/03`), new Date(`${year}/11/23`)];
+
+    window.onload = function () {
+
+        let while_flg = false;
+        while (
+            new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 5 && dt >= new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 12, 0, 0) || // 金曜日 12:00 判定
+            new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 6 || // 土曜日判定
+            new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 0 || // 日曜日判定
+            holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime() }) // 祝日判定
+        ) { 
+            dt.setDate(dt.getDate() + 1);
+            while_flg = true;
+        }
+
+        if (!while_flg) {
+            dt = is_noon(dt);
+        }
+
+        document.getElementById('center').textContent = `${dt.getMonth() + 1}月${dt.getDate()}日(${wd[dt.getDay()]})`;
+    }
+
+    /**
+    * 正午判定
+    * 
+    * @param Date
+    * @return Date
+    **/
+    function is_noon(dt) {
+        if (dt >= new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 12, 0, 0)) {
+            dt.setDate(dt.getDate() + 1);
+        }
+        return dt;
+    }
+</script>
+</head>
+<body>
+    <center id="center"></center>
+</body>
+</html>
