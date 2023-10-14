@@ -1,5 +1,6 @@
 # shipping
-EC出荷日を自動化して表示させる
+次回出荷予定日を自動化して表示させる
 
 next-shipment-scheduled.html
 holiday_datesに祝日をDateオブジェクトで設定する
+hourに出荷締め切り時間を設定する
