@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+    table.calbase_rakuten {
+        background-color: #FFFFFF;
+        border: 1px solid #CECECE;
+        width: 100%;
+        border-collapse: collapse;
+        padding: 0px 0px 10px 0px;
+    }
+
+    table.calbase_rakuten * {
+        font-size: 98%;
+        color: #000000;
+        border-collapse: collapse;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    table.calbase_rakuten th {
+        text-align: center;
+    }
+
+    th.caltitle_rakuten {
+        font-size: 85%;
+        padding: 10px 0px 0px 0px;
+    }
+
+    table.calframe_rakuten {
+        border-collapse: collapse;
+        margin: 10px 10px 0px 10px;
+        table-layout: fixed;
+        width: 178px;
+    }
+
+    table.calframe_rakuten th {
+        text-align: center;
+        padding: 0px 0px 3px 0px;
+    }
+
+    table.calframe_rakuten td {
+        border: 1px solid #FFFFFF;
+        background-color: #FFFFFF;
+        width: 19px;
+        height: 17px;
+        text-align: center;
+    }
+
+    tr.weektitle_rakuten td {
+        background-color: #EEEEEE;
+    }
+
+    td.event1day_rakuten {
+        background-color: #FFC6C6 !important;
+    }
+
+    font.event1day_rakuten {
+        color: #FFC6C6;
+    }
+
+    td.event2day_rakuten {
+        background-color: #B5DAFF !important;
+    }
+
+    font.event2day_rakuten {
+        color: #B5DAFF;
+    }
+
+    td.event3day_rakuten {
+        background-color: #FEDE93 !important;
+    }
+
+    font.event3day_rakuten {
+        color: #FEDE93;
+    }
+
+    table.event_rakuten {
+        text-align: left;
+        word-break: break-all;
+        margin: 7px 10px 7px 10px;
+        border-collapse: collapse;
+        line-height: 120%;
+        table-layout: fixed;
+        width: 141px;
+    }
+
+    table.event_rakuten td {
+        padding: 0px 0px 0px 0px;
+    }
+
+    table.text_rakuten {
+        text-align: left;
+        word-break: break-all;
+        margin: 0px 10px 10px 10px;
+        border-collapse: collapse;
+        line-height: 120%;
+        table-layout: fixed;
+        width: 178px;
+    }
+</style>
+
+<script type="text/javascript">
+    const year = 2023;
+    const holiday_dates = [new Date(`${year}/08/11`), new Date(`${year}/08/14`), new Date(`${year}/08/15`),
+        new Date(`${year}/08/16`), new Date(`${year}/09/18`), new Date(`${year}/10/09`),
+        new Date(`${year}/11/03`), new Date(`${year}/11/23`)];
+    const morning_only = [new Date(`${year}/08/10`)];
+    var date = 1;
+    
+    window.onload = function () {
+        let dt = new Date();
+        createYear(dt);
+        createMonth(dt);
+        create1stClendar(dt);
+        create2ndClendar(dt);
+    }
+
+    function createYear(dt) {
+        let year = dt.getFullYear();
+        document.getElementById('year0').textContent = year;
+        if ((dt.getMonth() + 1) > 12) {
+            year += 1;
+        }
+        document.getElementById('year1').textContent = year;
+    }
+
+    function createMonth(dt) {
+        let month = dt.getMonth() + 1;
+        if (month > 12) {
+            month = 1;
+        }
+        document.getElementById('month0').textContent = month;
+        month++;
+        if (month > 12) {
+            month = 1;
+        }
+        document.getElementById('month1').textContent = month;
+    }
+
+    function create1stClendar(dt) {
+        // 1週目
+        let end_of_last_month = new Date(dt.getFullYear(), dt.getMonth(), 0).getDate();
+        let end_of_last_day = new Date(dt.getFullYear(), dt.getMonth() - 1, end_of_last_month).getDay();
+        let row = document.getElementById('t0').insertRow();
+        // 1週目が日曜日から始まる場合処理を飛ばす
+        if (end_of_last_day != 6) {
+            for (let i = end_of_last_month - end_of_last_day; i <= end_of_last_month; i++) {
+                let td = row.insertCell();
+                td.textContent = i;
+                td.style.color = '#CECECE';
+            }
+        }
+        for (date; date <= (6 - end_of_last_day); date++) {
+            let td = row.insertCell();
+            if (new Date(dt.getFullYear(), dt.getMonth(), date).getDay() == 0) {
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (new Date(dt.getFullYear(), dt.getMonth(), date).getDay() == 6) {
+                td.textContent = date;
+                td.style.color = '#1D54A7';
+                td.classList.add("event1day_rakuten");
+            } else if (holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), date).getTime() })) {
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (morning_only.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), date).getTime() })) {
+                td.textContent = date;
+                td.style.color = '#000000';
+                td.classList.add("event2day_rakuten");
+            } else {
+                td.textContent = date;
+                td.style.color = '#000000';
+            }
+        }
+        // 2週目以降
+        let end_of_this_month = new Date(dt.getFullYear(), dt.getMonth() + 1, 0).getDate();
+        for (date; date <= end_of_this_month; date++) {
+            if (new Date(dt.getFullYear(), dt.getMonth(), date).getDay() == 0) {
+                row = document.getElementById('t0').insertRow();
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (new Date(dt.getFullYear(), dt.getMonth(), date).getDay() == 6) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#1D54A7';
+                td.classList.add("event1day_rakuten");
+            } else if (holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), date).getTime() })) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (morning_only.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), date).getTime() })) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#000000';
+                td.classList.add("event2day_rakuten");
+            } else {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#000000';
+            }
+        }
+        date--;
+        // 最終週
+        let end = new Date(dt.getFullYear(), dt.getMonth(), date).getDay();
+        for (let i = 1; i <= 6 - end; i++) {
+            let td = row.insertCell();
+            td.textContent = i;
+            td.style.color = '#CECECE';
+        }
+    }
+
+    function create2ndClendar(dt) {
+        // 1週目
+        date = 1;
+        let end_of_last_month = new Date(dt.getFullYear(), dt.getMonth() + 1, 0).getDate();
+        let end_of_last_day = new Date(dt.getFullYear(), dt.getMonth(), end_of_last_month).getDay();
+        let row = document.getElementById('t1').insertRow();
+        // 1週目が日曜日から始まる場合処理を飛ばす
+        if (end_of_last_day != 6) {
+            for (let i = end_of_last_month - end_of_last_day; i <= end_of_last_month; i++) {
+                let td = row.insertCell();
+                td.textContent = i;
+                td.style.color = '#CECECE';
+            }
+        }
+        for (date; date <= (6 - end_of_last_day); date++) {
+            let td = row.insertCell();
+            if (new Date(dt.getFullYear(), dt.getMonth() + 1, date).getDay() == 0) {
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (new Date(dt.getFullYear(), dt.getMonth() + 1, date).getDay() == 6) {
+                td.textContent = date;
+                td.style.color = '#1D54A7';
+                td.classList.add("event1day_rakuten");
+            } else if (holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth() + 1, date).getTime() })) {
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (morning_only.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth() + 1, date).getTime() })) {
+                td.textContent = date;
+                td.style.color = '#000000';
+                td.classList.add("event2day_rakuten");
+            } else {
+                td.textContent = date;
+                td.style.color = '#000000';
+            }
+        }
+        // 2週目以降
+        let end_of_this_month = new Date(dt.getFullYear(), dt.getMonth() + 2, 0).getDate();
+        for (date; date <= end_of_this_month; date++) {
+            if (new Date(dt.getFullYear(), dt.getMonth() + 1, date).getDay() == 0) {
+                row = document.getElementById('t1').insertRow();
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (new Date(dt.getFullYear(), dt.getMonth() + 1, date).getDay() == 6) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#1D54A7';
+                td.classList.add("event1day_rakuten");
+            } else if (holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth() + 1, date).getTime() })) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#BF0000';
+                td.classList.add("event1day_rakuten");
+            } else if (morning_only.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth() + 1, date).getTime() })) {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#000000';
+                td.classList.add("event2day_rakuten");
+            } else {
+                let td = row.insertCell();
+                td.textContent = date;
+                td.style.color = '#000000';
+            }
+        }
+        date--;
+        // 最終週
+        let end = new Date(dt.getFullYear(), dt.getMonth() + 1, date).getDay();
+        for (let i = 1; i <= 6 - end; i++) {
+            let td = row.insertCell();
+            td.textContent = i;
+            td.style.color = '#CECECE';
+        }
+    }
+</script>
+</head>
+
+<body>
+    <table class="calbase_rakuten">
+        <tr>
+            <td align="center">
+                <table>
+                    <tr>
+                        <td align="center">
+                            <table class="calframe_rakuten" id="t0">
+                                <tr>
+                                    <th colspan="7"><span id="year0"></span>年<span id="month0"></span>月</th>
+                                </tr>
+                                <tr class="weektitle_rakuten">
+                                    <td style="color:#BF0000">日</td>
+                                    <td style="color:#000000">月</td>
+                                    <td style="color:#000000">火</td>
+                                    <td style="color:#000000">水</td>
+                                    <td style="color:#000000">木</td>
+                                    <td style="color:#000000">金</td>
+                                    <td style="color:#1D54A7">土</td>
+                                </tr>
+                            </table>
+
+                            <table class="calframe_rakuten" id="t1">
+                                <tr>
+                                    <th colspan="7"><span id="year1"></span>年<span id="month1"></span>月</th>
+                                </tr>
+                                <tr class="weektitle_rakuten">
+                                    <td style="color:#BF0000">日</td>
+                                    <td style="color:#000000">月</td>
+                                    <td style="color:#000000">火</td>
+                                    <td style="color:#000000">水</td>
+                                    <td style="color:#000000">木</td>
+                                    <td style="color:#000000">金</td>
+                                    <td style="color:#1D54A7">土</td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="event_rakuten">
+                                <tr>
+                                    <td>
+                                        <font class="event1day_rakuten">■</font> 休業日
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <font class="event2day_rakuten">■</font> 受注・お問い合わせ業務のみ
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
