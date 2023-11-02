@@ -21,11 +21,13 @@ center {
     window.onload = function () {
 
         let while_flg = false;
+        let a = dt.getDay();
         while (
             new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 5 && dt >= new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), hour, 0, 0) || // 金曜日 12:00 判定
             new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 6 || // 土曜日判定
             new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getDay() == 0 || // 日曜日判定
-            holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime() }) // 祝日判定
+            holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime() }) || // 祝日判定
+            holiday_dates.some(function (e) { return e.getTime() == new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1).getTime() }) // 翌日祝日判定
         ) { 
             dt.setDate(dt.getDate() + 1);
             while_flg = true;
