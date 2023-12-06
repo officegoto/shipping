@@ -104,9 +104,14 @@
 
 <script type="text/javascript">
     const year = 2023;
-    const holiday_dates = [new Date(`${year}/08/11`), new Date(`${year}/08/14`), new Date(`${year}/08/15`),
+    const next_year = 2024;
+    const holiday_dates = [
+        new Date(`${year}/08/11`), new Date(`${year}/08/14`), new Date(`${year}/08/15`),
         new Date(`${year}/08/16`), new Date(`${year}/09/18`), new Date(`${year}/10/09`),
-        new Date(`${year}/11/03`), new Date(`${year}/11/23`)];
+        new Date(`${year}/11/03`), new Date(`${year}/11/23`),
+        new Date(`${year}/12/25`), new Date(`${year}/12/26`), new Date(`${year}/12/27`), new Date(`${year}/12/28`), new Date(`${year}/12/29`),
+        new Date(`${next_year}/01/01`), new Date(`${next_year}/01/08`),
+    ];
     const morning_only = [new Date(`${year}/08/10`)];
     var date = 1;
     
@@ -121,7 +126,7 @@
     function createYear(dt) {
         let year = dt.getFullYear();
         document.getElementById('year0').textContent = year;
-        if ((dt.getMonth() + 1) > 12) {
+        if ((dt.getMonth() + 1) >= 12) {
             year += 1;
         }
         document.getElementById('year1').textContent = year;
